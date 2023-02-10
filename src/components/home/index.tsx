@@ -8,38 +8,21 @@ import './home.scss';
 
 const Home = () => {
     const [key, setKey] = useState<any>('breed');
-    const [breedCount, setBreedCount] = useState<number>(0)
-
-    const getDogBreedsDataCount = async () => {
-        try {
-            const dogBreeds = await getDogBreeds()
-            console.log(dogBreeds.data)
-            setBreedCount(dogBreeds.data.length)
-        }catch(error) {
-
-        }
-    }
-
-    useEffect(() => {
-        getDogBreedsDataCount()
-    }, [])
     return (
         <div className="home-container" >
+        <div className="mb-4"><h1> Dog Breeds </h1></div>
         <Tabs
             id="controlled-tab-example"
             activeKey={key}
             onSelect={(k:any) => setKey(k)}
             className="mb-3"
             >
-            <Tab eventKey="breed" title="Breed">
-                <Breeds breedCount={breedCount} />
+            <Tab eventKey="breed" title="Breeds">
+                <Breeds />
             </Tab>
             <Tab eventKey="other" title="Other">
-                <div>Others</div>
+                <div>Search</div>
             </Tab>
-            {/* <Tab eventKey="contact" title="Contact">
-           
-            </Tab> */}
         </Tabs>
         </div>
     )

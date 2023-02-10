@@ -4,73 +4,71 @@ import Pagination from 'react-bootstrap/Pagination';
 import BreedViewModal from '../modal/breed';
 import Paginate from '../paginate';
 import PageLoader from '../loader';
-import { getBreedsByPageLimit  } from '../../apiservice/services';
+import { getDogBreeds, getBreedsByPageLimit  } from '../../apiservice/services';
 import { sortDataByOrder } from '../../common/utils';
+import * as _ from 'lodash';
 
-interface BreedsProp {
-    breedCount: number
-}
 
-const Breeds = ({breedCount} : BreedsProp) => {
-
-    const totalBreedsCount = breedCount;
+const Breeds = () => {
     const limit = 10;
-    const avg = totalBreedsCount/limit;
-    const paginateCount = avg > Math.floor(avg) ? Math.floor(avg) + 1 : Math.floor(avg);
-    
+
+    const [breedsData, setBreedsData] = useState<any>([])
+    const [paginateCount, setPaginateCount] = useState<number>(0);
     const [activeNum, setActiveNum] = useState<number>(1);
     const [showLoader, setShowLoader] = useState<Boolean>(false);
     const [breeds, setBreeds] = useState<any>([])
     const [breedDetails, setBreedDetails] = useState<any>({});
     const [showModal, setShowModal] = useState<Boolean>(false);
     const [sortType, setSortType] = useState<String>('asc');
-    
 
-    /* const getPaginationItems = () => {
-        let items: any = [];
 
-        for (let number = 1; number <= paginateCount; number++) {
-            items.push(
-                <Pagination.Item key={number} active={number === activeNum} onClick={() => {
-                    setActiveNum(number)
-                }}>
-                {number}
-                </Pagination.Item>,
-            );
-        }
-        return items;
-    } */
-
-    const getBreedsByLimit = async () => {
+    const getDogBreedsData = async () => {
         setShowLoader(true);
         try {
-            const breedData = await getBreedsByPageLimit(limit, activeNum - 1)
-            setBreeds(breedData.data)
-        } catch(error) {
+            const dogBreeds = await getDogBreeds();
+            setBreedsData(dogBreeds.data)
+
+            const totalBreedsCount = dogBreeds.data.length;
+            const avg = totalBreedsCount/limit;
+
+            setPaginateCount(avg > Math.floor(avg) ? Math.floor(avg) + 1 : Math.floor(avg))
+
+        }catch(error) {
             console.log("Error:", error)
         } finally{
             setShowLoader(false);
         }
-    };
+    }
+
+    const setBreedsByLimit = () => {
+        let start =  activeNum === 1 ? activeNum - 1 : ( (limit * activeNum) - limit);
+        let end = limit * activeNum;
+
+        const limitdata = _.slice(breedsData, start, end);
+        setBreeds(limitdata);
+    }
 
     const sortByType = (type: string) => {
+
+        setActiveNum(1);
+
         switch(type){
             case 'NAME':
-                console.log("NameSort")
-                let nameSortData = sortDataByOrder(breeds,'name',sortType)
-                setBreeds(nameSortData);
+                let nameSortData = sortDataByOrder(breedsData,'name',sortType)
+                console.log("nameSortData:", nameSortData);
+                setBreedsData(nameSortData);
                 break;
             
 
             case 'HEIGHT': 
-                let sortHeightData = sortDataByOrder(breeds, 'height.metric' ,sortType)
-                setBreeds(sortHeightData);
+                let sortHeightData = sortDataByOrder(breedsData, 'height.metric' ,sortType)
+                setBreedsData(sortHeightData);
                 break;
             
 
             case 'LIFE_SPAN': 
-                let sortLifeSpanData = sortDataByOrder(breeds, 'life_span' ,sortType)
-                setBreeds(sortLifeSpanData);
+                let sortLifeSpanData = sortDataByOrder(breedsData, 'life_span' ,sortType)
+                setBreedsData(sortLifeSpanData);
                 break;
             
         }
@@ -83,13 +81,17 @@ const Breeds = ({breedCount} : BreedsProp) => {
     }
 
     useEffect(() => {
-        getBreedsByLimit()
-    }, [activeNum])
+        setBreedsByLimit()
+    }, [activeNum, breedsData])
+
+    useEffect(() => {
+        getDogBreedsData();
+    }, [])
 
 
     return (
         <div>
-
+            
          {
              showLoader ? (
                 <PageLoader isLoading={showLoader} />
@@ -102,7 +104,7 @@ const Breeds = ({breedCount} : BreedsProp) => {
                         <th> 
                             <span className="pointer text-decoration-underline" 
                                 onClick={() => {sortByType('NAME'); setSortType( sortType === "asc" ? "desc" : "asc" ) } }> 
-                                Name
+                                Breed Name <i className="bi bi-arrow-down"></i>
                             </span> 
                         </th>
                         <th> 
@@ -143,13 +145,9 @@ const Breeds = ({breedCount} : BreedsProp) => {
                 </Table>
 
                 <br/>
-                {/* <Pagination>
-                    {
-                        getPaginationItems()
-                    }
-                </Pagination> */}
+                
                 <div className="float-end">
-                    <Paginate pageCount={paginateCount} setActiveNum={setActiveNum}/>
+                    <Paginate pageCount={paginateCount} activeNum={activeNum} setActiveNum={setActiveNum} />
                 </div>
                 <br />
                  </>
@@ -163,10 +161,6 @@ const Breeds = ({breedCount} : BreedsProp) => {
                 <BreedViewModal showModal={showModal} setShowModal={setShowModal} breedDetails={breedDetails} />
             )
         }
-
-        
-
-        
         
         </div>
     )

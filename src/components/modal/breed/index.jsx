@@ -31,7 +31,7 @@ const BreedViewModal = (props) => {
                         }
                         
                         <Card.Img className={ showShimmer ? 'd-sm-none' : 'd-sm-block'} variant="top" src={breedDetails.image.url} onLoad={() => {
-                            console.log("image loaded"); setShowShimmer(false)
+                            setShowShimmer(false)
                         }}/>
 
                         <Card.Body>
@@ -44,7 +44,7 @@ const BreedViewModal = (props) => {
                             </Card.Text>
                         </Card.Body>
                         <ListGroup className="list-group-flush">
-                            <ListGroup.Item>Height: {breedDetails.height.metric} </ListGroup.Item>
+                            <ListGroup.Item>Height (metric): {breedDetails.height.metric} </ListGroup.Item>
                             <ListGroup.Item>Life Span: {breedDetails.life_span} </ListGroup.Item>
                             <ListGroup.Item>Temperament: {breedDetails.temperament}</ListGroup.Item>
                         </ListGroup>

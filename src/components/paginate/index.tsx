@@ -4,11 +4,13 @@ import Pagination from 'react-bootstrap/Pagination';
 
 const Paginate = (props: any) => {
 
-    const { pageCount, setActiveNum } = props;
+    const { pageCount, activeNum, setActiveNum } = props;
 
-    const [selectedPage, setSelectedPage] = useState<number>(1)
-
-    console.log("pagecount:", pageCount)
+    const [selectedPage, setSelectedPage] = useState<number>(activeNum)
+    
+    useEffect(() => {
+        setSelectedPage(activeNum)
+    }, [activeNum])
 
     const getPageButtons = () => {
         let items = []
@@ -61,7 +63,6 @@ const Paginate = (props: any) => {
     }
 
     useEffect(() => {
-        console.log("Selected Page no:", selectedPage)
         setActiveNum(selectedPage)
     }, [selectedPage])
 
