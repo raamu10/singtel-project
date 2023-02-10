@@ -19,7 +19,6 @@ const SearchBreed = () => {
         breedData: store.breedData
     }));
 
-    console.log("breedData:", breedData)
 
     const [nameList, setNameList] = useState<any>([])
     const [selectedBreedId, setSelectedBreedId] = useState<any>();
@@ -31,7 +30,6 @@ const SearchBreed = () => {
         try {
             const result = await getBreedsById(selectedBreedId);
             setSearchedBreed(result.data);
-            console.log(result.data);
             setShowLoader(false);
         } catch (error) {
             console.log(error)
@@ -53,6 +51,19 @@ const SearchBreed = () => {
         setShowLoader(true);
         getBreedById()
     }, 1000);
+
+    /**
+     * Debounce function for API to wait for some seconds
+     */
+    var debounceFunc = (func: any, timeout: number) => {
+        let timer:any;
+        return (...args: any) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                func.apply(this, args)
+            }, timeout);
+        }
+    }
           
 
     useEffect(() => {
@@ -70,7 +81,11 @@ const SearchBreed = () => {
     }, [breedData]);
 
     useEffect(() => {
-        debounce_fun()
+        //debounce_fun()
+        debounceFunc(()=> {
+            setShowLoader(true);
+            getBreedById()
+        }, 1000)()
     }, [selectedBreedId]);
 
     return (
@@ -101,6 +116,7 @@ const SearchBreed = () => {
                         <PageLoader isLoading={showLoader} />
                      ) : 
                     (
+                        searchedBreed && (
                         searchedBreed.map((breedItem: any, idx: number) => {
                         return (
 
@@ -126,7 +142,7 @@ const SearchBreed = () => {
                             </Col>
                             </React.Fragment>
                         )
-                    }))
+                    })))
                 }
 
             </Row>
