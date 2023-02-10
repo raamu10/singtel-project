@@ -7,7 +7,9 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 
+import PageLoader from '../loader';
 import { getBreedsById } from '../../apiservice/services';
+import * as _ from 'lodash';
 
 import './searchBreed.scss';
 
@@ -17,17 +19,25 @@ const SearchBreed = () => {
         breedData: store.breedData
     }));
 
+    console.log("breedData:", breedData)
+
     const [nameList, setNameList] = useState<any>([])
     const [selectedBreedId, setSelectedBreedId] = useState<any>();
     const [searchedBreed, setSearchedBreed] = useState<any>([]);
+    const [showLoader, setShowLoader] = useState<Boolean>(false);
     
     const getBreedById = async () => {
+        setShowLoader(true);
         try {
             const result = await getBreedsById(selectedBreedId);
             setSearchedBreed(result.data);
             console.log(result.data);
+            setShowLoader(false);
         } catch (error) {
             console.log(error)
+            setShowLoader(false);
+        } finally {
+            setShowLoader(false);
         }
     };
 
@@ -36,23 +46,31 @@ const SearchBreed = () => {
         const shimmerDiv = img.previousSibling as HTMLElement;
         img.className = 'card-img-top d-sm-block';
         shimmerDiv.className = 'photo shine d-sm-none';
-        console.log("img", img);
-        console.log("shimmerDiv", shimmerDiv);
     }
 
+    //Debounce search API for 1 sec
+    var debounce_fun = _.debounce(function () {
+        setShowLoader(true);
+        getBreedById()
+    }, 1000);
+          
+
     useEffect(() => {
-        let names:any = [];
-        breedData.forEach((breed: any) => {
-            names.push({
-                id: breed.id,
-                name: breed.name
+        if (breedData) {
+            let names:any = [];
+            breedData.forEach((breed: any) => {
+                names.push({
+                    id: breed.id,
+                    name: breed.name
+                })
             })
-        })
-        setNameList(names);
+            setNameList(names);
+
+        }
     }, [breedData]);
 
     useEffect(() => {
-        getBreedById()
+        debounce_fun()
     }, [selectedBreedId]);
 
     return (
@@ -76,18 +94,19 @@ const SearchBreed = () => {
             </Row>
             <div className="mt-5">
             <Row>
+                
 
                 { 
-                    (searchedBreed.map((breedItem: any, idx: number) => {
+                    showLoader ? (
+                        <PageLoader isLoading={showLoader} />
+                     ) : 
+                    (
+                        searchedBreed.map((breedItem: any, idx: number) => {
                         return (
 
                             <React.Fragment key={idx}>
                             <Col xs={6} md={4} lg={3}>
                                 <Card className="mb-3">
-                                    {/*  showShimmer && (
-                                            <div className="photo shine"></div>
-                                        )
-                                     */}
 
                                     <div className="photo shine d-sm-block"></div>
                                     

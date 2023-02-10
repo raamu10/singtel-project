@@ -1,3 +1,6 @@
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'
+
 export const actionTypes:any = {
     SetBreedData: 'SetBreed Action',
     ResetBreedData: 'GetBreed Action'
@@ -5,23 +8,32 @@ export const actionTypes:any = {
 
 const initalState:any = [];
 
-export const BreedReducer = (state:any = initalState, action: any) => {
-    switch (action.type) {
-        case actionTypes.SetBreedData: {
-          const data = action.payload
-          return [
-            ...data,
-          ]
-        }
-  
-        case actionTypes.ResetBreedData: {
-          return initalState;
-        }
-  
-        default:
-          return state
-      }
-}
+export const BreedReducer = /* persistReducer (
+    {
+        storage,
+        key: 'v001-app',
+        blacklist: [],
+    }, */
+    (state:any = initalState, action: any) => {
+        switch (action.type) {
+            case actionTypes.SetBreedData: {
+              const data = action.payload
+              return [
+                ...data,
+              ]
+            }
+      
+            case actionTypes.ResetBreedData: {
+              return initalState;
+            }
+      
+            default:
+              return state
+          }
+    }
+//)
+
+
 
 export const BreedAction = {
     SetBreedData: (payload: any) => ({
