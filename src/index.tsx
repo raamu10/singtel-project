@@ -5,6 +5,10 @@ import App from './App';
 import PageLoader from './components/loader'
 import reportWebVitals from './reportWebVitals';
 
+import * as redux from 'redux';
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
 //Bootstrap Style
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -13,9 +17,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
+    <Provider store={store}>
     <Suspense fallback={<PageLoader isLoading={true} />}>
       <App />
     </Suspense>
+    </Provider>
   </React.StrictMode>
 );
 

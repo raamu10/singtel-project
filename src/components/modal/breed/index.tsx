@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Card from 'react-bootstrap/Card';
-import { ShimmerThumbnail } from "react-shimmer-effects-18";
+//import  ShimmerThumbnail  from "react-shimmer-effects-18";
 import ListGroup from 'react-bootstrap/ListGroup';
 
-const BreedViewModal = (props) => {
+import '../../searchBreed/searchBreed.scss';
+
+const BreedViewModal = (props: any) => {
     const {showModal, setShowModal, breedDetails} = props;
     const [showShimmer, setShowShimmer] = useState(true);
 
@@ -26,7 +28,7 @@ const BreedViewModal = (props) => {
                 <Modal.Body>
                      <Card  className="m-auto" style={{ width: '18rem' }}>
                         { showShimmer && (
-                           <ShimmerThumbnail height={150} rounded />
+                                <div className="photo shine"></div>
                             )
                         }
                         

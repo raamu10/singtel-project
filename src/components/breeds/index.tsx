@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { shallowEqual, useDispatch } from 'react-redux';
 import Table from 'react-bootstrap/Table';
 import Pagination from 'react-bootstrap/Pagination';
 import BreedViewModal from '../modal/breed';
@@ -6,11 +7,13 @@ import Paginate from '../paginate';
 import PageLoader from '../loader';
 import { getDogBreeds, getBreedsByPageLimit  } from '../../apiservice/services';
 import { sortDataByOrder } from '../../common/utils';
+import { BreedAction } from '../../redux/reducers/breedReducer';
 import * as _ from 'lodash';
 
 
 const Breeds = () => {
     const limit = 10;
+    const dispatch = useDispatch();
 
     const [breedsData, setBreedsData] = useState<any>([])
     const [paginateCount, setPaginateCount] = useState<number>(0);
@@ -27,6 +30,7 @@ const Breeds = () => {
         try {
             const dogBreeds = await getDogBreeds();
             setBreedsData(dogBreeds.data)
+            dispatch(BreedAction.SetBreedData(dogBreeds.data))
 
             const totalBreedsCount = dogBreeds.data.length;
             const avg = totalBreedsCount/limit;

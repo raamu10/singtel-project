@@ -16,3 +16,10 @@ export function getBreedsByPageLimit(limit: number, pageNum: number) {
         'x-api-key': API_KEY
     }})
 };
+
+export function getBreedsById(breedId: number) {
+    return axios.get(API_URL + `/v1/images/search?limit=20&mime_types=&order=Random&size=small&page=1&breed_ids=${breedId}&sub_id=`, { headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': API_KEY
+    }})
+};
