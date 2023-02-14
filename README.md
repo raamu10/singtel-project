@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Getting Started with SingTel App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Steps to up the application
 
 ## Available Scripts
 
@@ -9,7 +9,7 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [http://localhost:3030](http://localhost:3030) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
@@ -27,20 +27,42 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Screens
 
-### `npm run eject`
+# Home Screen
+   Display Two tabls "Breeds" and "Search"
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+# Breeds
+   Display list of Breeds
+   Implemented API to get Dog breeds - https://api.thedogapi.com/v1/breeds
+   Added Loader before api gets back the response
+   Added Pagination
+   Sort by 'Breed Name', 'Height', 'Life Span' on clicking the Column Title, and gets sorted in Asc or Desc order
+   Click on View under Information column to view the details of Breed
+   Used redux to store the response data.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Search
+  Select a Breed
+  Added Debounce for 1 sec to make a api call
+  Implemented search API to get the Breed data - https://api.thedogapi.com/v1/images/search?limit=20&mime_types=&order=Random&size=small&page=1&breed_ids=2&sub_id=
+  Added Loader before api gets back the response
+  Using cards each data got displayed
+  Added Shimmer Effect(Image loader) before the complete image gets loaded.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+# Test - Jest
+  Used Jest for unit testing
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+# CodeSandbox Link
+  https://codesandbox.io/p/github/raamu10/singtel-project/master?workspaceId=acfa9ac3-184b-41e3-8d3d-75fece965cf7&file=%2Fsrc%2Fcomponents%2Fpaginate%2Findex.tsx
 
-## Learn More
+# Review URL - From CodeSandbox
+  https://nzv22r-3030.preview.csb.app/
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+# GitHub
+  https://github.com/raamu10/singtel-project
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+
+
+

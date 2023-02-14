@@ -59,7 +59,6 @@ const Breeds = () => {
         switch(type){
             case 'NAME':
                 let nameSortData = sortDataByOrder(breedsData,'name',sortType)
-                console.log("nameSortData:", nameSortData);
                 setBreedsData(nameSortData);
                 break;
             
