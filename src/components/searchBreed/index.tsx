@@ -12,6 +12,8 @@ import { getBreedsById } from '../../apiservice/services';
 import * as _ from 'lodash';
 
 import './searchBreed.scss';
+import Toast from 'react-bootstrap/Toast';
+import ToastContainer from 'react-bootstrap/ToastContainer';
 
 const SearchBreed = () => {
 
@@ -24,15 +26,19 @@ const SearchBreed = () => {
     const [selectedBreedId, setSelectedBreedId] = useState<any>();
     const [searchedBreed, setSearchedBreed] = useState<any>([]);
     const [showLoader, setShowLoader] = useState<Boolean>(false);
-    
+    const [showAlert, setShowAlert] = useState<Boolean>(false);
+    const [alertMsg, setAlertMsg] = useState<string>('');
+
     const getBreedById = async () => {
         setShowLoader(true);
         try {
             const result = await getBreedsById(selectedBreedId);
+            console.log(result)
             setSearchedBreed(result.data);
             setShowLoader(false);
-        } catch (error) {
-            console.log(error)
+        } catch (error: any) {
+            setShowAlert(true)
+            setAlertMsg(error.response.data.message)
             setShowLoader(false);
         } finally {
             setShowLoader(false);
@@ -63,8 +69,7 @@ const SearchBreed = () => {
                 func.apply(this, args)
             }, timeout);
         }
-    }
-          
+    }     
 
     useEffect(() => {
         if (breedData) {
@@ -89,6 +94,7 @@ const SearchBreed = () => {
     }, [selectedBreedId]);
 
     return (
+        <>
         <Container fluid>
             <Row className="g-4">
                 <Col md={4}>
@@ -148,6 +154,20 @@ const SearchBreed = () => {
             </Row>
             </div>
         </Container>
+        {
+            showAlert && (
+                <ToastContainer position="top-end">
+                    <Toast bg="danger" onClose={() => setShowAlert(false)} delay={3000} autohide>
+                        <Toast.Header>
+                            Error
+                        </Toast.Header>
+                        <Toast.Body>{alertMsg}</Toast.Body>
+                    </Toast>
+                </ToastContainer>
+            )
+        }
+        
+        </>
     )
 };
 

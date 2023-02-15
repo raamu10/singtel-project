@@ -40,6 +40,7 @@ Your app is ready to be deployed!
    Sort by 'Breed Name', 'Height', 'Life Span' on clicking the Column Title, and gets sorted in Asc or Desc order
    Click on View under Information column to view the details of Breed
    Used redux to store the response data.
+   Displayed Error message in toaster
 
 # Search
   Select a Breed
@@ -48,6 +49,7 @@ Your app is ready to be deployed!
   Added Loader before api gets back the response
   Using cards each data got displayed
   Added Shimmer Effect(Image loader) before the complete image gets loaded.
+  Displayed Error message in toaster
 
 # Test - Jest
   Used Jest for unit testing

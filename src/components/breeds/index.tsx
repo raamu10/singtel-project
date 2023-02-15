@@ -10,6 +10,9 @@ import { sortDataByOrder } from '../../common/utils';
 import { BreedAction } from '../../redux/reducers/breedReducer';
 import * as _ from 'lodash';
 
+import Toast from 'react-bootstrap/Toast';
+import ToastContainer from 'react-bootstrap/ToastContainer';
+
 
 const Breeds = () => {
     const limit = 10;
@@ -23,7 +26,8 @@ const Breeds = () => {
     const [breedDetails, setBreedDetails] = useState<any>({});
     const [showModal, setShowModal] = useState<Boolean>(false);
     const [sortType, setSortType] = useState<String>('asc');
-
+    const [showAlert, setShowAlert] = useState<Boolean>(false);
+    const [alertMsg, setAlertMsg] = useState<string>('');
 
     const getDogBreedsData = async () => {
         setShowLoader(true);
@@ -36,9 +40,12 @@ const Breeds = () => {
             const avg = totalBreedsCount/limit;
 
             setPaginateCount(avg > Math.floor(avg) ? Math.floor(avg) + 1 : Math.floor(avg))
+            setShowLoader(false);
 
-        }catch(error) {
-            console.log("Error:", error)
+        }catch(error: any) {
+            setShowAlert(true)
+            setAlertMsg(error.response.data.message)
+            setShowLoader(false);
         } finally{
             setShowLoader(false);
         }
@@ -162,6 +169,19 @@ const Breeds = () => {
         {
             showModal && (
                 <BreedViewModal showModal={showModal} setShowModal={setShowModal} breedDetails={breedDetails} />
+            )
+        }
+
+        {
+            showAlert && (
+                <ToastContainer position="top-end">
+                    <Toast bg="danger" onClose={() => setShowAlert(false)} delay={3000} autohide>
+                        <Toast.Header>
+                            Error
+                        </Toast.Header>
+                        <Toast.Body>{alertMsg}</Toast.Body>
+                    </Toast>
+                </ToastContainer>
             )
         }
         
